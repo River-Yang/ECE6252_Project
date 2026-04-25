@@ -10,6 +10,14 @@ The detector uses `0 = real` and `1 = fake`. Inference is run on face frames,
 then video-level scores are computed by averaging frame scores from the same
 video.
 
+**Scope**
+
+- Model: ResNet50 with a single-logit binary head
+- Input: cropped face frames resized to `224 x 224`
+- Training data: FF++ face crops
+- Evaluation data: FF++ clean/shifted conditions and DFDC
+- Reported unit: video-level score from mean frame probability
+
 **Main files**
 
 ```text
@@ -28,6 +36,17 @@ results/figures/                Figures used in the report
 
 There are no notebooks in this version. All experiments are run through Python
 scripts.
+
+**Scripts**
+
+| Experiment | Script |
+| --- | --- |
+| FF++ baseline training | `src/training/train.py` |
+| FF++ / DFDC clean evaluation | `src/evaluation/cross_dataset_eval.py` |
+| FF++ shift evaluation | `src/evaluation/shift_eval.py` |
+| Pre-generated shifted-copy evaluation | `src/evaluation/shift_infra.py` |
+| Provenance / watermark policy simulation | `src/policies/authenticity_policy_eval.py` |
+| Report tables and figures | `src/evaluation/final_report_assets.py` |
 
 **Environment**
 
@@ -137,6 +156,16 @@ python -m src.datasets.prepare_dfdc_kaggle --config configs/default.yaml
 **Reproducing results**
 
 Run these commands in order.
+
+Full order:
+
+1. Prepare FF++.
+2. Prepare DFDC.
+3. Train the FF++ baseline, or download the checkpoint below.
+4. Run clean FF++ / DFDC evaluation.
+5. Run FF++ shift evaluation.
+6. Run the provenance / watermark policy simulation.
+7. Build report tables and figures.
 
 Train the FF++ baseline:
 
