@@ -1,0 +1,113 @@
+seed: 42
+
+paths:
+  # Update these scratch paths before reproducing on a different machine.
+  ffpp_real_dir: /home/hice1/yyang3119/scratch/deepfake_data/ffpp/raw/real
+  ffpp_fake_dir: /home/hice1/yyang3119/scratch/deepfake_data/ffpp/raw/fake
+  dfdc_real_dir: /home/hice1/yyang3119/scratch/deepfake_data/dfdc/raw/real
+  dfdc_fake_dir: /home/hice1/yyang3119/scratch/deepfake_data/dfdc/raw/fake
+  ffpp_split_csv: data/ffpp/splits/ffpp_splits.csv
+  dfdc_split_csv: data/dfdc/splits/dfdc_test.csv
+  ffpp_frame_manifest: /home/hice1/yyang3119/scratch/deepfake_data/ffpp/frames/ffpp_frames.csv
+  dfdc_frame_manifest: /home/hice1/yyang3119/scratch/deepfake_data/dfdc/frames/dfdc_frames.csv
+  ffpp_face_manifest: /home/hice1/yyang3119/scratch/deepfake_data/ffpp/faces/ffpp_faces.csv
+  ffpp_shift_root: /home/hice1/yyang3119/scratch/deepfake_data/ffpp/faces/images
+  ffpp_external_shift_manifest: data/ffpp/splits/ffpp_test_shift_external_faces.csv
+  dfdc_face_manifest: /home/hice1/yyang3119/scratch/deepfake_data/dfdc/faces/dfdc_faces.csv
+  hf_cache_dir: /home/hice1/yyang3119/scratch/deepfake_data/cache/huggingface
+  checkpoint_dir: results/checkpoints
+  prediction_dir: results/predictions
+  figure_dir: results/figures
+  table_dir: results/tables
+  log_dir: results/logs
+
+data:
+  image_size: 224
+  frames_per_video: 10
+  min_valid_frames: 5
+  ffpp_train_real: 800
+  ffpp_train_fake: 800
+  ffpp_val_real: 200
+  ffpp_val_fake: 200
+  ffpp_test_real: 200
+  ffpp_test_fake: 200
+  dfdc_test_real: 400
+  dfdc_test_fake: 400
+  allowed_video_exts:
+    - .mp4
+    - .avi
+    - .mov
+    - .mkv
+
+hf_datasets:
+  ffpp:
+    name: RohanRamesh/ff-images-dataset
+    real_categories:
+      - original
+    fake_categories:
+      - Deepfakes
+    save_images: true
+  dfdc:
+    name: 191fa07121/deepfake-detection-challenge
+
+model:
+  name: resnet50
+  pretrained: true
+
+train:
+  batch_size: 32
+  lr: 0.0001
+  epochs: 15
+  weight_decay: 0.00001
+  early_stop_patience: 3
+  num_workers: 0
+
+eval:
+  threshold: 0.5
+  batch_size: 32
+  num_workers: 0
+
+policy:
+  t_low: 0.4
+  t_high: 0.7
+
+provenance:
+  weak:
+    real_prob: 0.4
+    fake_prob: 0.2
+  medium:
+    real_prob: 0.7
+    fake_prob: 0.2
+  strong:
+    real_prob: 0.9
+    fake_prob: 0.1
+
+shifts:
+  ffpp_external_condition_label: combo_comp_blur_noise
+  ffpp_conditions:
+    - clean
+    - jpeg_q95
+    - jpeg_q75
+    - jpeg_q50
+    - jpeg_q30
+    - blur_s1
+    - blur_s2
+    - gaussian_noise_s8
+    - speckle_s005
+    - pixelate_b8
+    - brightness_07
+    - brightness_13
+    - contrast_07
+    - crop_90
+    - crop_80
+    - resize_reencode
+  dfdc_conditions:
+    - clean
+    - jpeg_q95
+    - jpeg_q75
+    - jpeg_q50
+    - blur_s1
+    - blur_s2
+    - crop_90
+    - crop_80
+    - resize_reencode

@@ -1,0 +1,2 @@
+comparison,delta_auc,delta_f1,delta_fnr
+FF++ clean -> DFDC cross-dataset,0.3822549890166227,0.5900362363497424,0.736733481347134

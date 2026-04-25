@@ -1,0 +1,16 @@
+.venv/
+.codex
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+data/cache/
+data/ffpp/faces/
+data/dfdc/frames/
+data/dfdc/faces/
+
+results/checkpoints/
+results/predictions/*frame_predictions.csv
+
+.DS_Store
